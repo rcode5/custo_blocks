@@ -1,0 +1,19 @@
+.page-header
+  h1 Block
+
+dl
+  dt Title
+  dd= @block.title
+  dt Block type
+  dd= @block.block_type
+  dt Description
+  dd= @block.description
+
+- if can?(:edit, @block)
+  = link_to 'Edit', edit_block_path(@block), class: 'btn'
+  '
+= link_to 'Back', blocks_path, class: 'btn'
+
+- if can?(:destroy, @block)
+  '
+  = link_to'Destroy', block_path(@block), method: :delete, data: { confirm: "Are you sure?" }, class: 'btn btn-danger'

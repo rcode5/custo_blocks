@@ -1,0 +1,30 @@
+@import 'twitter/bootstrap';
+@import '_footer';
+
+// Navbar
+
+.wrapper > .container {
+  padding-top: 60px; // Push the content down so that it's below our pinned navbar.
+}
+
+textarea,input {
+  width: 450px;
+  &:focus {
+    border: 1px solid #897559;
+  }
+}
+textarea {
+  &.text-short {
+    height: 60px;
+  }
+  &.text-medium {
+    height: 150px;
+  }
+}
+.help-block, .caption {
+  margin-left: 0;  
+  font-size: small;
+  font-style: italic;
+  color: #999;
+}
+
