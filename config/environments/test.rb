@@ -37,4 +37,4 @@ CustoBlocks::Application.configure do
 
   config.action_mailer.default_url_options = { host: 'example.com' }
 end
-Sorcery::CryptoProviders::BCrypt.cost = 1
+#Sorcery::CryptoProviders::BCrypt.cost = 1

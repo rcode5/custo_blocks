@@ -19,4 +19,5 @@ CustoBlocks::Application.routes.draw do
 
   resources :users
 
+  root :to => 'blocks#index'
 end

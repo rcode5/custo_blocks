@@ -1,5 +1,5 @@
 module BlocksHelper
-  def render_dynamic_form_fields(form, base_block, opts)
+  def render_dynamic_form_fields(form, base_block, opts={})
     s = ''
     begin
       (Block.module_types[base_block.module_type] || {}).each do |k,v| 

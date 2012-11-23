@@ -4,6 +4,8 @@
     = f.text_input_row :title, 'Insert a title'
     = f.select_input_row :block_type, "Here\'s a hint for choosing block type - choose the right one.", :select => [ ['First Option', 'first'], ['Other Option', 'second']], help: "And we could put more help text"
     = f.textarea_input_row :description, 'Enter a description of this block', input_html: { class: 'text-short' }
+    = render_dynamic_form_fields(f, @block)
+
 
   .form-actions
     = f.button :submit, class: 'btn btn-primary'
