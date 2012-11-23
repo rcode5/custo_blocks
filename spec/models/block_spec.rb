@@ -1,5 +1,7 @@
 require 'spec_helper'
 
 describe Block do
-  pending "add some examples to (or delete) #{__FILE__}"
+  it 'sets up the types' do
+    Block.block_types.should_not be_empty
+  end
 end

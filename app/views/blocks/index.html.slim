@@ -9,7 +9,7 @@
         th Actions
         
     tbody
-    - @blocks_by_type[type].each do |block|
+    - (@blocks_by_type[type] || []).each do |block|
       tr
         td= link_to(block.title, block)
         td

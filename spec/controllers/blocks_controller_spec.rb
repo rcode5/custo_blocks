@@ -2,14 +2,9 @@ require 'spec_helper'
 
 describe BlocksController do
 
-  # This should return the minimal set of attributes required to create a valid
-  # Block. As you add validations to Block, be sure to
-  # update the return value of this method accordingly.
   def valid_attributes
-    attributes_for :block
-  end
-
-  before do
+    { block_type: 'RockBlock',
+      title: 'Rock it'}
   end
 
   describe "GET index" do
@@ -21,16 +16,23 @@ describe BlocksController do
   end
 
   describe "GET show" do
+    let(:new_block){ Block.create! valid_attributes }
+    before do
+      new_block
+      get :show, {:id => new_block.to_param}
+    end
     it "assigns the requested block as @block" do
-      block = Block.create! valid_attributes
-      get :show, {:id => block.to_param}
-      assigns(:block).should eq(block)
+      assigns(:block).should eq(new_block)
     end
   end
 
   describe "GET new" do
-    it "assigns a new block as @block" do
+    it "requires type" do
       get :new, {}
+      response.should redirect_to '/blocks'
+    end
+    it "assigns a new block as @block" do
+      get :new, {type: 'SuperBlock'}
       assigns(:block).should be_a_new(Block)
     end
   end
@@ -88,7 +90,7 @@ describe BlocksController do
         # specifies that the Block created on the previous line
         # receives the :update_attributes message with whatever params are
         # submitted in the request.
-        Block.any_instance.should_receive(:update_attributes).with({'these' => 'params'})
+        Block.any_instance.should_receive(:update_attributes).with({'these' => 'params'}, {without_protection: true})
         put :update, {:id => block.to_param, :block => {'these' => 'params'}}
       end
 

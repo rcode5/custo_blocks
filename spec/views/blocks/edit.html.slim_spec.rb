@@ -5,7 +5,6 @@ describe "blocks/edit" do
     @block = assign(:block, stub_model(Block,
       :title => "MyString",
       :block_type => "MyString",
-      :description => "MyText"
     ))
   end
 
@@ -16,7 +15,6 @@ describe "blocks/edit" do
     assert_select "form", :action => blocks_path(@block), :method => "post" do
       assert_select "input#block_title", :name => "block[title]"
       assert_select "input#block_block_type", :name => "block[block_type]"
-      assert_select "textarea#block_description", :name => "block[description]"
     end
   end
 end

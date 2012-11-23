@@ -3,7 +3,6 @@
 FactoryGirl.define do
   factory :block do
     title "MyString"
-    block_type "MyString"
-    description "MyText"
+    block_type "UnknownBlock"
   end
 end
