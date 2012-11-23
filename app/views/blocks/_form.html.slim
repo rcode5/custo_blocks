@@ -1,9 +1,8 @@
-= admin_form_for(@block) do |f|
+= simple_form_for(@block, :html => {:class => 'form-horizontal' }) do |f|
 
   .form-inputs
-    = f.text_input_row :title, 'Insert a title'
-    = f.select_input_row :block_type, "Here\'s a hint for choosing block type - choose the right one.", :select => [ ['First Option', 'first'], ['Other Option', 'second']], help: "And we could put more help text"
-    = f.textarea_input_row :description, 'Enter a description of this block', input_html: { class: 'text-short' }
+    = f.hidden_field :block_type
+    = f.input :title, placeholder: 'Insert a title'
     = render_dynamic_form_fields(f, @block)
 
 

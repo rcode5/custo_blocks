@@ -1,6 +1,6 @@
 rock:
   display_name: Rock
-  type: string
+  datatype: string
 roll:
   display_name: Roll
-  type: text
+  datatype: text

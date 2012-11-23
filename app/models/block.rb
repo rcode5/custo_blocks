@@ -1,8 +1,9 @@
 class Block < ActiveRecord::Base
-  attr_accessible :block_type, :description, :title
+  attr_accessible :block_type, :title
   validates :title, presence: true
+  validates :block_type, presence: true
 
-  RESERVED_FIELDS = [ :name, :description, :block_type, :extensions ]
+  RESERVED_FIELDS = [ :title, :block_type, :extensions ]
   attr_accessible *RESERVED_FIELDS
 
   store :extensions
@@ -22,14 +23,19 @@ class Block < ActiveRecord::Base
   end
 
   # initialize
-  Dir.glob(File.join(Rails.root, 'config', 'blocks','*_block.{yml,yaml}')).each do |f|
+  Dir.glob(File.join(Rails.root, 'config', 'blocks','*_block.yml')).each do |f|
+    puts "Reading #{f}"
     begin
-      key = File.basename(f).gsub(/\.[yml|yaml]$/,'').classify
+      key = File.basename(f).gsub(/\.yml$/,'').classify
       add_block_type key, YAML.load(File.open(f))
    rescue Exception => ex
+      puts ex
       Rails.logger.warn "Failed to import block #{f}"
       Rails.logger.warn ex
     end
   end  
-  
+
+  def template_name 
+    self.block_type.tableize.singularize
+  end
 end

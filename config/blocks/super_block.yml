@@ -1,0 +1,6 @@
+alias:
+  display_name: Alias
+  datatype: string
+super_power:
+  display_name: Super Power
+  datatype: string

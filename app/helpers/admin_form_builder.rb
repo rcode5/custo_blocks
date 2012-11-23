@@ -48,10 +48,11 @@ class AdminFormBuilder < ActionView::Helpers::FormBuilder
   
   def field_row(field, input_area_content, hint, opts = {})
     begin
-      if object.class == ContentModule 
-        module_info = ContentModule.module_types[object.module_type]
-        if module_info && module_info[:exclude]
-          return '' if module_info[:exclude].include? field.to_s
+      p "Object", object
+      if object.class == Block 
+        block_info = Block.block_types[object.block_type]
+        if block_info && block_info[:exclude]
+          return '' if block_info[:exclude].include? field.to_s
         end
       end
     rescue

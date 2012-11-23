@@ -1,28 +1,20 @@
-div.page-header
-  h1 Listing blocks
+- Block.block_types.each do |type, block_def|
+  h2= type.tableize.humanize.titleize
 
-- Block.block_types.keys.each do |type|
-  h2= type.humanize.titleize 
 
-  = @blocks_by_type.map{|k,v| "#{k} => #{v}"}.join(",")
   table.table.table-striped
     thead
       tr
-        th ID
         th Title
-        th Block type
-        th Description
         th Actions
-
+        
     tbody
-    - @blocks.each do |block|
+    - @blocks_by_type[type].each do |block|
       tr
-        td= link_to('block', block)
-        td= block.title
-        td= block.block_type
-        td= block.description
+        td= link_to(block.title, block)
         td
           = link_to 'Edit', edit_block_path(block), class: 'btn btn-mini'
           = link_to 'Destroy', block_path(block), method: :delete, data: { confirm: "Are you sure?" }, class: 'btn btn-mini btn-danger'
-
-    = link_to 'New Rock Block', new_block_path(type: 'rock'), class: 'btn btn-primary'
+  
+    = link_to "New #{type} Block", new_block_path(type: type), class: 'btn btn-primary'
+    
