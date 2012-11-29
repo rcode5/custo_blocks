@@ -16,10 +16,12 @@ Requirements
 Running the Specs
 =================
 
+    $ bundle
     $ rake db:setup db:test:prepare
     $ rake
 
 Running the Application
 =======================
 
+    $ bundle
     $ foreman start
