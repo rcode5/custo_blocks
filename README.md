@@ -1,6 +1,7 @@
 Overview
 ========
 
+
 This is a sample app that shows how you build custom fields on ActiveRecord objects using ActiveRecord::Store.
 
 For the write up, check out http://rcode5.wordpress.com
