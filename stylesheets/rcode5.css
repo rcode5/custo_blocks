@@ -29,69 +29,56 @@ body, #container, .inner {
   overflow: hidden;
   scroll: none;
 }
+.samples {
+  clear:both;
+  max-width: 1200px;
+}
+.samples img {
+  float:left;
+  margin: 10px;
+  padding: 10px;
+  border: 1px dotted #aaa;
+}
+#container ul {
+  margin-bottom: 20px;
+}
 /*
-slides                */
+  slides                */
 .slide {
   position: absolute;
   top: 49px;
   margin-left: 200px;
   overflow: hidden;
+  clear: right;
 }
 
 .slide.transition, .sub-slide.transition {
-    -webkit-transition: left .4s ease;
-  }
+  -webkit-transition: left .4s ease;
+}
 
-  .slide .head {
-    text-align: center;
-    font-size: 48px;
-    font-weight: normal;
-    margin: 60px 0 60px;
-  }
+.slide .head {
+  text-align: center;
+  font-size: 48px;
+  font-weight: normal;
+  margin: 60px 0 60px;
+}
 
-  .slide.bulleted li {
-    font-size: 34px;
-    line-height: 90px;
-    width: 800px;
-    margin: 0 auto;
-  }
+.slide.bulleted li {
+  font-size: 34px;
+  line-height: 90px;
+  width: 800px;
+  margin: 0 auto;
+}
 
-  .slide.bulleted.narrow li {
-    width: 400px;
-  }
+.slide.bulleted.narrow li {
+  width: 400px;
+}
 
-  .slide img {
-    display: block;
-    height: 50%;
-    margin: 0 auto;
-  }
-
-  .slide label.caption {
-    display: block;
-    text-align: center;
-    font-size: 24px;
-    font-weight: normal;
-    margin-top: 40px;    
-  }
-
-  .slide .center {
-    text-align: center;
-    font-size: 60px;
-    font-weight: normal;
-    position: absolute;
-    left: 0;
-    right: 0;
-    top: 50%;
-    margin-top: -30px;
-    line-height: 60px;
-    height: 60px;
-  }
-
-  .sub-slide {
-    position: absolute;
-    left: 0;
-    top: 40px;
-  }
+.sub-slide {
+  position: absolute;
+  left: 0;
+  top: 40px;
+}
 
 
 @media screen and (max-width: 1000px) {
