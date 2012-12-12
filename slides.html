@@ -178,7 +178,7 @@ end
           
         <div class="sub-slide">
           <h4>Controller - as you might expect</h4>
-          <pre><code data-language='ruby'>def create
+          <pre><code data-language='ruby'>  def create
     @block = Block.new(params[:block], :without_protection => true)
     if @block.save
       redirect_to @block, notice: 'Block was successfully created.'
