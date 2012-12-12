@@ -129,8 +129,9 @@ irb> Block.last.roll
         <div class="slide">
           <h1>Forms and Views</h1>
           <div class='sub-slide'>
-            <h4>haml edit form</h4>
-<pre><code>= simple_form_for(@block, :html => {:class => 'form-horizontal' }) do |f|
+            <h4>edit form (slim)</h4>
+<pre><code>! in views/blocks/_form.html.slim
+= simple_form_for(@block, :html => {:class => 'form-horizontal' }) do |f|
 
   .form-inputs
     = f.hidden_field :block_type
@@ -142,16 +143,15 @@ irb> Block.last.roll
     '
     = link_to 'Back', blocks_path, class: 'btn'
 
-</code></pre> 
-            <h4>haml show form</h4>
-<pre><code>dl
-  dt Title
-  dd= @block.title
-  dt Rock
-  dd= @block.rock
-  dt Roll 
-  dd= @block.roll
-
+</code></pre>
+            <h4>show (slim)</h4>
+<pre><code>! in views/blocks/_rock_block.html.slim 
+.rock_block
+  h1= @block.title
+  .rock_field
+    = "#{@block.rock} is a kind of rock"
+  .roll_field
+    = "#{@block.roll} is a kind of roll"
 </code></pre> 
             </div>
           <div class="sub-slide">
