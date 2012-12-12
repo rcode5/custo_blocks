@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <link rel="stylesheet" type="text/css" href="stylesheets/reset.css" media="screen" />
+    <link rel="stylesheet" type="text/css" href="stylesheets/rcode5.css" media="screen" />
+    <link rel="stylesheet" type="text/css" href="stylesheets/syntax_highlighter.css" media="screen" />
+    <script src="javascripts/slides.js"></script>
+    <script src="javascripts/syntax_highlighter.js"></script>
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <title>CustoBlocks by rcode5</title>
+  </head>
+
+  <body>
+    <div id="container">
+      <div class="inner">
+
+        <div class="slide">
+          <h1>custo blocks</h1>
+          <p>github.com/rcode5/custo_blocks</p>
+          <p>mr rogers 2012</p>
+        </div>
+
+        <div class="slide">
+          <h1>inspiration</h1>
+          <ul>
+            <li>Flexible CMS widgets</li>
+            <li>Discussions with Ingar and Erik</li>
+            <li>Bedsider</li>
+            <li>SmileMaker</li>
+          </ul>
+        </div>
+
+        <div class="slide">
+          <h1>code</h1>
+          <div class='sub-slide'>
+            create the Block model
+          </div>
+          <div class='sub-slide'>
+            <pre><code data-language='ruby'># -- db/migrate/<date>_create_block.rb --
+class CreateBlock < ActiveRecord::Migration
+  def change
+    create_table :blocks do |t|
+      t.string :title
+      t.string :block_type
+      t.text :extensions
+      t.timestamps
+    end
+  end
+end
+</code></pre>
+            <pre><code data-language='ruby'># -- app/models/block.rb --
+class Block < ActiveRecord::Base
+  RESERVED_FIELDS = [ :title, :block_type, :extensions ]
+  attr_accessible *RESERVED_FIELDS
+
+  store :extensions # <= ActiveRecord::Store
+end
+</code></pre>
+            </div>
+            <div class='sub-slide'>
+              and for the block field definitions, a little YAML
+            </div>
+            <div class='sub-slide'>
+            <pre><code data-language='ruby'># -- config/blocks/rock_block.yml --
+rock:
+  display_name: Rock
+  type: string
+roll:
+  display_name: Roll
+  type: text
+</code></pre>
+          </div>
+          <div class='sub-slide'>
+            <p>Add a little Rails fairy dust to the model</p>
+            <pre><code data-language='ruby'># determine possible block types by reading config files
+cattr_accessor :block_types
+
+@@block_types = {}
+
+def self.add_block_type key, block_data
+  @@block_types[key] = HashWithIndifferentAccess.new(block_data)
+  @@block_types[key].each do |k,v|
+    unless RESERVED_FIELDS.include? k.to_sym
+      store_accessor :extensions, k.to_sym
+    end
+  end
+end
+
+# initialize
+Dir.glob(File.join(Rails.root, 'config', 'blocks','*_block.yml')).each do |f|
+  puts "Reading #{f}"
+  begin
+    key = File.basename(f).gsub(/\.yml$/,'').classify
+    add_block_type key, YAML.load(File.open(f))
+ rescue Exception => ex
+    puts ex
+    Rails.logger.warn "Failed to import block #{f}"
+    Rails.logger.warn ex
+  end
+end  
+              </code></pre>
+          </div>
+        </div>
+        <div class="slide">
+          <h1>create a Block</h1>
+          <pre><code data-language='ruby'>irb> block = Block.new(block_type: "RockBlock", title: "Sabbath")
+=>   < Block id: nil, title: "Sabbath", block_type: "RockBlock", extensions: {}, created_at: nil, updated_at: nil>
+irb> block.rock = "granite"
+=>   "granite"
+irb> block.roll = "it's what wheels do"
+=>   "it's what wheels do"
+irb> block.save
+=>   true
+irb> Block.last.roll
+=>   "it's what wheels do"
+          </code></pre>
+        </div>
+        <div class="slide">
+          <h1>Forms and Views</h1>
+          <div class='sub-slide'>
+            <h4>haml edit form</h4>
+<pre><code>= simple_form_for(@block, :html => {:class => 'form-horizontal' }) do |f|
+
+  .form-inputs
+    = f.hidden_field :block_type
+    = f.input :title, placeholder: 'Insert a title'
+    = render_dynamic_form_fields(f, @block)
+
+  .form-actions
+    = f.button :submit, class: 'btn btn-primary'
+    '
+    = link_to 'Back', blocks_path, class: 'btn'
+
+</code></pre> 
+            <h4>haml show form</h4>
+<pre><code>dl
+  dt Title
+  dd= @block.title
+  dt Rock
+  dd= @block.rock
+  dt Roll 
+  dd= @block.roll
+
+</code></pre> 
+            </div>
+          <div class="sub-slide">
+            <h4>Form helpers</h4>
+          <pre><code data-language='ruby'>module BlocksHelper
+  def render_dynamic_form_fields(form, block, opts={})
+    s = ''
+    begin
+      (Block.block_types[block.block_type] || {}).each do |k,v| 
+        opts.merge!({as: v[:datatype], label: v[:display_name]})
+        s += form.send('input', k, opts)
+      end
+      s.html_safe
+    rescue Exception => ex
+      Rails.logger.warn 'Failed to add form fields for block [%s]' % block.inspect
+      Rails.logger.warn 'Check the YAML file for that block and make sure it\'s properly configured'
+      Rails.logger.warn ex
+      ''
+    end
+  end
+end
+</code></pre> 
+          </div>
+          
+        <div class="sub-slide">
+          <h4>Controller - as you might expect</h4>
+          <pre><code data-language='ruby'>
+def create
+    @block = Block.new(params[:block], :without_protection => true)
+    if @block.save
+      redirect_to @block, notice: 'Block was successfully created.'
+    else
+      render action: "new"
+    end
+  end
+
+  def update
+    @block = Block.find(params[:id])
+    if @block.update_attributes(params[:block], :without_protection => true)
+      redirect_to @block, notice: 'Block was successfully updated.'
+    else
+      render action: "edit"
+    end
+  end
+</code></pre>
+        </div>
+   </div>
+   <footer>
+     github.com/rcode5/custo_blocks - mr rogers 2012
+   </footer>
+  </body>
+</html>
