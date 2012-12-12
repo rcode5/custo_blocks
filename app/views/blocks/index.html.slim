@@ -1,5 +1,9 @@
 - Block.block_types.each do |type, block_def|
-  h2= type.tableize.humanize.titleize
+  .span12
+    h2= type.tableize.humanize.titleize
+    = link_to "New #{type}", new_block_path(type: type), class: 'btn new_block'
+    
+
 
 
   table.table.table-striped
@@ -16,5 +20,3 @@
           = link_to 'Edit', edit_block_path(block), class: 'btn btn-mini'
           = link_to 'Destroy', block_path(block), method: :delete, data: { confirm: "Are you sure?" }, class: 'btn btn-mini btn-danger'
   
-    = link_to "New #{type} Block", new_block_path(type: type), class: 'btn btn-primary'
-    
