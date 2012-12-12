@@ -1,7 +1,7 @@
-dl
-  dt Title
-  dd= @block.title
-  dt Rock
-  dd= @block.rock
-  dt Roll 
-  dd= @block.roll
+.rock_block
+  h1 rock
+  .rock_field
+    = "#{@block.rock} is a kind of rock"
+  .roll_field
+    = "#{@block.roll} is a kind of roll"
+
